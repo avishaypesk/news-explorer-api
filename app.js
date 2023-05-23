@@ -1,44 +1,36 @@
+require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const mongoose = require('mongoose');
+const { errors } = require('celebrate');
+const { errorLogger, requestLogger } = require('./middlewares/logger');
+const centralerrhandler = require('./middlewares/centralerrhandler');
+const NotFoundError = require('./utils/httperrors/notfounderror');
+const mainRoute = require('./routes');
+const { MONGODB_DEV_URL } = require('./utils/constants');
 
+const { PORT = 3000, NODE_ENV, MONGODB_URL = MONGODB_DEV_URL } = process.env;
 const app = express();
 
-const { PORT = 3000 } = process.env;
-
-mongoose.connect('');
-
-const helmet = require('helmet');
-
-app.use(helmet());
-
-const { errors } = require('celebrate');
-
-const { NOT_FOUND } = require('./utils/errorcodes');
-
-const userRouter = require('./routes/users');
-
-const centralerrhandler = require('./middleware/centralerrhandler');
-
-const { errorLogger, requestLogger } = require('./middleware/logger');
+mongoose.connect(MONGODB_URL);
 
 app.use(cors());
 app.options('*', cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-require('dotenv').config();
+app.use(helmet());
 
 app.use(requestLogger);
-app.use(errorLogger);
 
-app.use('/', userRouter);
+app.use('/', mainRoute);
+
+app.use('/', (req, res, next) => {
+  next(new NotFoundError('Requested resource not found.'));
+});
+
+app.use(errorLogger);
 
 app.use(errors());
 app.use(centralerrhandler);
 
-app.use('/', (req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Requested resource not found.' });
-});
-
-app.listen(PORT);
+if (NODE_ENV !== 'test') app.listen(PORT);

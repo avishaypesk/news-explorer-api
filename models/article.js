@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+const isURL = require('validator/lib/isURL');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
@@ -26,27 +26,22 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator(value) {
-        return validator.isURL(value);
-      },
-      message: 'Invalid URL',
+      validator: isURL,
+      message: 'Invalid URL.',
     },
   },
   image: {
     type: String,
     required: true,
     validate: {
-      validator(value) {
-        return validator.isURL(value);
-      },
-      message: 'Invalid URL',
+      validator: isURL,
+      message: 'Invalid URL.',
     },
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    type: mongoose.Types.ObjectId,
     select: false,
   },
 });
 
-module.exports = mongoose.model('card', articleSchema);
+module.exports = mongoose.model('article', articleSchema);

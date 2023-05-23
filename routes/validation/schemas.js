@@ -1,18 +1,8 @@
-const router = require('express').Router();
-const auth = require('../middleware/auth');
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
-const {
-  deleteArticle,
-  createArticle,
-  getArticles,
-  getCurrentUser,
-} = require('../controllers/users');
-
-const { createUser, validateUser } = require('../controllers/articles');
 
 const validateURL = (value, helpers) => (validator.isURL(value) ? value : helpers.error('string.uri'));
-const validateEmail = (value, helpers) => (validator.isEmail(value) ? value : helpers.error('string.uri'));
+const validateEmail = (value, helpers) => (validator.isEmail(value) ? value : helpers.error('string.email'));
 
 const validateNewArticleRequest = celebrate({
   body: Joi.object().keys({
@@ -28,11 +18,13 @@ const validateNewArticleRequest = celebrate({
 
 const validateDeleteArticleRequest = celebrate({
   params: Joi.object().keys({
-    articleId: Joi.string().min(24).max(24).required(),
+    articleId: Joi.string()
+      .min(24).max(24).required()
+      .hex(),
   }),
 });
 
-const validateSignupRequest = celebrate({
+const validateCreateUserRequest = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
     name: Joi.string().min(2).max(30).required(),
@@ -40,23 +32,16 @@ const validateSignupRequest = celebrate({
   }),
 });
 
-const validateSigninRequest = celebrate({
+const validateLoginRequest = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail),
     password: Joi.string().min(6).required(),
   }),
 });
 
-router.get('/users/me', auth, getCurrentUser);
-
-router.get('/articles', auth, getArticles);
-
-router.post('/articles', auth, validateNewArticleRequest, createArticle);
-
-router.delete('/articles/:articleId', auth, validateDeleteArticleRequest, deleteArticle);
-
-router.post('/signup',validateSignupRequest, createUser);
-
-router.post('/signin',validateSigninRequest, validateUser);
-
-module.exports = router;
+module.exports = {
+  validateNewArticleRequest,
+  validateDeleteArticleRequest,
+  validateCreateUserRequest,
+  validateLoginRequest,
+};

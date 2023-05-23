@@ -1,44 +1,60 @@
-const User = require('../models/users');
-const Article = require('../models/article');
-const NotFoundError = require('../utils/notfounderror');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const { JWT_DEV_SECRET } = require('../utils/constants');
+const AuthorizationError = require('../utils/authorizationerror');
+const ConflictError = require('../utils/conflicterror');
+const ValidationError = require('../utils/validationerror');
+const { UNAUTHORIZED } = require('../utils/errorcodes');
+const { JWT_SECRET, NODE_ENV } = process.env;
+
+const createUser = (req, res, next) => {
+  const { email, name, password } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      User.create({ email, name, password: hash })
+        .then((user) => {
+          res.send({ name, email, _id: user._id });
+        })
+        .catch((err) => {
+          if (err.code === 11000) {
+            next(new ConflictError('User already exists'));
+          } else next(err);
+        });
+    })
+    .catch(next);
+};
 
 const getCurrentUser = (req, res, next) => {
   const { _id: userId } = req.user;
   User.findById(userId)
-    .orFail(() => next(new NotFoundError('User Id was not found.')))
     .then((user) => {
       res.send({ email: user.email, name: user.name });
     })
     .catch(next);
 };
 
-const getArticles = (req, res, next) => {
-  Article.find({})
-    .orFail(() => new Error('Article list is empty'))
-    .then((articles) => res.send(articles))
+const validateUser = (req, res, next) => {
+  const { email, password } = req.body;
+  User.findOne({ email })
+    .select('password')
+    .select('name')
+    .then((user) => {
+      if (!user) {
+        next(new ValidationError('User was not found', UNAUTHORIZED));
+        return;
+      }
+      bcrypt.compare(password, user.password).then((match) => {
+        if (!match) {
+          next(new AuthorizationError('Incorrect credentials provided'));
+          return;
+        }
+        const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET, { expiresIn: '7d' });
+        res.send({ token, name: user.name });
+      });
+    })
     .catch(next);
 };
 
-
-const createArticle = (req, res, next) => {
-  // const { keyword, title, text, date, source, link, image } = req.body;
-  Article.create({ ...req.body, owner: req.user._id })
-    .orFail(next)
-    .then((article) => res.send(article))
-    .catch(next);
-};
-
-
-const deleteArticle = (req, res, next) => {
-  Article.findByIdAndRemove(req.params.articleId)
-    .orFail(() => new NotFoundError('Article not found.'))
-    .then((deletedArticle) => res.send(deletedArticle))
-    .catch(next);
-};
-
-module.exports = {
-  getCurrentUser,
-  getArticles,
-  createArticle,
-  deleteArticle
-};
+module.exports = { createUser, validateUser, getCurrentUser };

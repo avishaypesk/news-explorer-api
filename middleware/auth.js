@@ -1,8 +1,7 @@
+
 const jwt = require('jsonwebtoken');
-
-const AuthorizationError = require('../utils/authorizationerror');
-
-const { FORBIDDEN } = require('../utils/errorcodes');
+const AuthorizationError = require('../utils/httperrors/authorizationerror');
+const { FORBIDDEN } = require('../utils/httpstatuscodes');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
 
@@ -16,7 +15,6 @@ module.exports = (req, res, next) => {
   const token = authorization.replace('Bearer ', '');
   let payload;
   try {
-    console.log(token);
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
     next(new AuthorizationError('Invalid token provided.', FORBIDDEN));
