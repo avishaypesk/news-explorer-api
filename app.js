@@ -4,9 +4,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
-const { errorLogger, requestLogger } = require('./middlewares/logger');
-const centralerrhandler = require('./middlewares/centralerrhandler');
-const NotFoundError = require('./utils/httperrors/notfounderror');
+const { errorLogger, requestLogger } = require('./middleware/logger');
+const centralerrhandler = require('./middleware/centralerrhandler');
+const NotFoundError = require('./utils/notfounderror');
 const mainRoute = require('./routes');
 const { MONGODB_DEV_URL } = require('./utils/constants');
 
