@@ -1,11 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const { JWT_DEV_SECRET } = require('../utils/constants');
+const User = require('../models/users');
 const AuthorizationError = require('../utils/authorizationerror');
 const ConflictError = require('../utils/conflicterror');
 const ValidationError = require('../utils/validationerror');
 const { UNAUTHORIZED } = require('../utils/errorcodes');
+const JWT_DEV_SECRET = 'jwt-dev-secret';
 const { JWT_SECRET, NODE_ENV } = process.env;
 
 const createUser = (req, res, next) => {

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { createUser, validateUser, getCurrentUser } = require('../controllers/users');
 const { validateCreateUserRequest, validateLoginRequest } = require('./validation/schemas');
-const auth = require('../middlewares/auth');
+const auth = require('../middleware/auth');
 
 router.get('/users/me', auth, getCurrentUser);
 
