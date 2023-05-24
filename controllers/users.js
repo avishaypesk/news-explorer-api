@@ -5,9 +5,7 @@ const AuthorizationError = require('../utils/authorizationerror');
 const ConflictError = require('../utils/conflicterror');
 const ValidationError = require('../utils/validationerror');
 const { UNAUTHORIZED } = require('../utils/errorcodes');
-const JWT_DEV_SECRET = 'jwt-dev-secret';
 const { JWT_SECRET, NODE_ENV } = process.env;
-
 const createUser = (req, res, next) => {
   const { email, name, password } = req.body;
   bcrypt
@@ -50,7 +48,7 @@ const validateUser = (req, res, next) => {
           next(new AuthorizationError('Incorrect credentials provided'));
           return;
         }
-        const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'my_secret', { expiresIn: '7d' });
         res.send({ token, name: user.name });
       });
     })
