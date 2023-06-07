@@ -15,7 +15,6 @@ const app = express();
 
 mongoose.connect(MONGODB_URL);
 
-app.use(cors());
 app.use(cors({
   origin: '*'
 }));
