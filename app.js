@@ -17,6 +17,10 @@ mongoose.connect(MONGODB_URL);
 
 app.use(cors());
 app.options('*', cors());
+app.options('/*', (_, res) => {
+  res.sendStatus(200);
+});
+
 app.use(express.json());
 app.use(helmet());
 
