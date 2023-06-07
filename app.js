@@ -11,26 +11,19 @@ const mainRoute = require('./routes');
 const MONGODB_DEV_URL = 'mongodb://0.0.0.0:27017/news-explorer';
 
 const { PORT = 3000, NODE_ENV, MONGODB_URL = MONGODB_DEV_URL } = process.env;
+
 const app = express();
 
 mongoose.connect(MONGODB_URL);
 
-app.use((req, res, next) => {
-  // Set headers to allow cross-origin requests
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+const corsOptions = {
+  origin: 'http://localhost:3000', // frontend server address
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
 
-  // Check if the request is an options request
-  if (req.method === 'OPTIONS') {
-    // Respond with a 200 status code
-    res.sendStatus(200);
-  } else {
-    // Continue to the next middleware
-    next();
-  }
-});
-
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(helmet());
 
