@@ -16,14 +16,7 @@ const app = express();
 
 mongoose.connect(MONGODB_URL);
 
-const corsOptions = {
-  origin: 'http://localhost:3000', // frontend server address
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(helmet());
 
