@@ -16,7 +16,9 @@ const app = express();
 mongoose.connect(MONGODB_URL);
 
 app.use(cors());
-app.options('*', cors());
+app.use(cors({
+  origin: '*'
+}));
 app.options('/*', (_, res) => {
   res.sendStatus(200);
 });
