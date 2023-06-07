@@ -15,12 +15,7 @@ const app = express();
 
 mongoose.connect(MONGODB_URL);
 
-app.use(cors({
-  origin: '*'
-}));
-app.options('/*', (_, res) => {
-  res.sendStatus(200);
-});
+app.use(cors());
 
 app.use(express.json());
 app.use(helmet());
