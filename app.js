@@ -15,9 +15,21 @@ const app = express();
 
 mongoose.connect(MONGODB_URL);
 
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
+app.use((req, res, next) => {
+  // Set headers to allow cross-origin requests
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+  // Check if the request is an options request
+  if (req.method === 'OPTIONS') {
+    // Respond with a 200 status code
+    res.sendStatus(200);
+  } else {
+    // Continue to the next middleware
+    next();
+  }
+});
 
 app.use(express.json());
 app.use(helmet());
