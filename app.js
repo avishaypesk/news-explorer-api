@@ -17,7 +17,7 @@ const app = express();
 mongoose.connect(MONGODB_URL);
 
 app.use(cors({
-  origin: ['https://www.avishaypesk-news.crabdance.com', 'https://avishaypesk-news.crabdance.com', 'http://localhost:3000/', '34.165.5.147']
+  origin: ['https://www.avishaypesk-news.ignorelist.com', 'https://avishaypesk-news.ignorelist.com', 'http://localhost:3000/', '34.165.5.147']
 }));
 app.use(express.json());
 app.use(helmet());
