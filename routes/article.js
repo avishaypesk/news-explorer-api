@@ -6,6 +6,7 @@ const {
   createArticle,
   getSavedArticles,
 } = require('../controllers/articles');
+
 const { validateNewArticleRequest, validateDeleteArticleRequest } = require('./validation/schemas');
 
 router.get('/articles', auth, getSavedArticles);

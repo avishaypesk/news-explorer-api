@@ -10,11 +10,15 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  text: {
+  description: {
     type: String,
     required: true,
   },
-  date: {
+  content: {
+    type: String,
+    required: true,
+  },
+  publishedAt: {
     type: String,
     required: true,
   },

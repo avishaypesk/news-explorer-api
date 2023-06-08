@@ -17,9 +17,7 @@ app.use(cors());
 
 mongoose.connect(MONGODB_URL);
 
-
 app.use((req, res, next) => {
-  console.log(req.headers);
   next();
 });
 

@@ -8,11 +8,16 @@ const validateNewArticleRequest = celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required(),
     title: Joi.string().required(),
-    text: Joi.string().required(),
-    date: Joi.string().required(),
-    source: Joi.string().required(),
-    link: Joi.string().custom(validateURL).required(),
-    image: Joi.string().custom(validateURL).required(),
+    author: Joi.string().required(),
+    description: Joi.string().required(),
+    content: Joi.string().required(),
+    publishedAt: Joi.string().required(),
+    source: Joi.object().keys({
+      id: Joi.allow(null),
+      name: Joi.string().required()
+    }),
+    url: Joi.string().custom(validateURL).required(),
+    urlToImage: Joi.string().custom(validateURL).required(),
   }),
 });
 
