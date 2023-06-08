@@ -6,6 +6,7 @@ const ConflictError = require('../utils/conflicterror');
 const ValidationError = require('../utils/validationerror');
 const { UNAUTHORIZED } = require('../utils/errorcodes');
 const { JWT_SECRET, NODE_ENV } = process.env;
+
 const createUser = (req, res, next) => {
   const { email, name, password } = req.body;
   bcrypt
