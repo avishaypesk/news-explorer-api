@@ -13,16 +13,15 @@ const MONGODB_DEV_URL = 'mongodb://0.0.0.0:27017/news-explorer';
 const { PORT = 3000, NODE_ENV, MONGODB_URL = MONGODB_DEV_URL } = process.env;
 
 const app = express();
+app.use(cors());
 
 mongoose.connect(MONGODB_URL);
 
-app.use(cors({
-  origin: ['https://www.avishaypesk-news.ignorelist.com', 'https://avishaypesk-news.ignorelist.com', 'http://localhost:3000', '34.165.5.147'],
-  preflightContinue: true,
-  credentials: true,
-  exposedHeaders: ['set-cookie'],
-  optionsSuccessStatus: 204
-}));
+
+app.use((req, res, next) => {
+  console.log(req.headers);
+  next();
+});
 
 app.use(express.json());
 app.use(helmet());
