@@ -29,7 +29,6 @@ const getCurrentUser = (req, res, next) => {
   const { _id: userId } = req.user;
   User.findById(userId)
     .then((user) => {
-      console.log(user.name);
       res.send({ email: user.email, name: user.name });
     })
     .catch(next);

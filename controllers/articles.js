@@ -27,7 +27,10 @@ const createArticle = (req, res, next) => {
     owner: req.user._id,
   })
     .then((article) => res.send(article))
-    .catch(next);
+    .catch(err => {
+      console.error(err);
+      res.status(400).send({ message: 'Error saving article', error: err.message });
+    })
 };
 
 
