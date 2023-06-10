@@ -13,7 +13,9 @@ const MONGODB_DEV_URL = 'mongodb://0.0.0.0:27017/news-explorer';
 const { PORT = 3000, NODE_ENV, MONGODB_URL = MONGODB_DEV_URL } = process.env;
 
 const app = express();
+
 app.use(cors());
+app.options('*', cors());
 
 mongoose.connect(MONGODB_URL);
 
