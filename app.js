@@ -14,7 +14,12 @@ const { PORT = 3000, NODE_ENV, MONGODB_URL = MONGODB_DEV_URL } = process.env;
 
 const app = express();
 
-app.use(cors());
+['https://www.avishaypesk-news.ignorelist.com'];
+const corsOptions = {
+  origin: allowedOrigins,
+};
+
+app.use(cors(corsOptions));
 app.options('*', cors());
 
 mongoose.connect(MONGODB_URL);
