@@ -20,6 +20,7 @@ app.options('*', cors());
 mongoose.connect(MONGODB_URL);
 
 app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   next();
 });
 
@@ -30,9 +31,8 @@ app.use(requestLogger);
 
 app.use('/', mainRoute);
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
+app.use('/', (req, res, next) => {
+  next(new NotFoundError('Requested resource not found.'));
 });
 
 app.use(errorLogger);
