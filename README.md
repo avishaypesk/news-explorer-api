@@ -1,28 +1,54 @@
-# News Explorer Frontend
+# News Explorer API
 
-A web application for exploring and saving news articles. This frontend repository is part of the News Explorer project.
+News Explorer API is the backend component of the News Explorer project. It provides the necessary server-side functionality for user authentication, article search, and managing saved articles.
 
-## Introduction
+The API is built using Node.js and Express.js, and it interacts with a MongoDB database to store user information and saved articles.
 
-The News Explorer Frontend is a web application that allows users to search for and save news articles from various sources. It provides a user-friendly interface for browsing and managing bookmarked articles.
+## Table of Contents
 
-This repository contains the frontend codebase of the News Explorer project. For the backend code, please refer to the [News Explorer Backend repository](https://github.com/avishaypesk/news-explorer-api).
+- [Features](#features)
+- [Technologies](#technologies)
+- [API Endpoints](#api-endpoints)
+- [Authentication](#authentication)
+- [Error Handling](#error-handling)
 
 ## Features
 
 - User registration and authentication
-- Search for news articles using keywords
-- Bookmark and save articles
-- Manage saved articles (view, delete)
-- Responsive design for optimal viewing across devices
+- Article search from external news sources
+- Saving and managing articles for each user
+- Secure password storage using bcrypt hashing
+- JWT-based authentication for API access
 
 ## Technologies
 
-The frontend of the News Explorer project is built using the following technologies:
+The News Explorer API is built using the following technologies:
 
-- HTML5
-- CSS3
-- JavaScript
-- React.js
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Tokens (JWT)
+- bcrypt
 
-## Screenshots
+## API Endpoints
+
+The News Explorer API provides the following endpoints:
+
+- `POST /signup` - User registration
+- `POST /signin` - User login
+- `GET /users/me` - Get user information
+- `GET /articles` - Search for articles
+- `GET /articles/saved` - Get saved articles for the authenticated user
+- `POST /articles` - Save an article for the authenticated user
+- `DELETE /articles/:articleId` - Delete a saved article
+
+For detailed information about each endpoint and their request/response formats, please refer to the API documentation or Postman collection.
+
+## Authentication
+
+The News Explorer API uses JWT-based authentication to protect the API endpoints. When a user registers or logs in, a JWT token is generated and returned in the response. This token is included in the `Authorization` header of subsequent requests as a Bearer token.
+
+## Error Handling
+
+The API handles errors gracefully and returns appropriate error responses with detailed error messages and status codes. The error handling middleware ensures consistent error responses for various scenarios.
